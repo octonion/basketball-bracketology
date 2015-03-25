@@ -1,0 +1,293 @@
+
+R version 3.1.3 (2015-03-09) -- "Smooth Sidewalk"
+Copyright (C) 2015 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 
+> games <- read.csv("outcomes.csv", header=TRUE)
+> teams <- read.csv("teams.csv", header=TRUE)
+> 
+> games$team <- as.factor(games$team)
+> games$opponent <- as.factor(games$opponent)
+> 
+> games <- rbind(games, data.frame(team=games$opponent, opponent=games$team, won=games$lost, lost=games$won))
+> 
+> head(games)
+  team opponent     won  lost
+1    1        1       0     0
+2   64       64       0     0
+3    1        2 3497771 43925
+4    1        3 1619871 30790
+5    1        4 1809832 37278
+6    1        5  849111 45138
+> 
+> dim(games)
+[1] 4036    4
+> 
+> fit <- glm(cbind(won,lost) ~ team+opponent, family=binomial(logit), data=games)
+> 
+> fit
+
+Call:  glm(formula = cbind(won, lost) ~ team + opponent, family = binomial(logit), 
+    data = games)
+
+Coefficients:
+(Intercept)        team2        team3        team4        team5        team6  
+  8.465e-16   -4.088e+00   -3.808e+00   -3.694e+00   -3.132e+00   -3.880e+00  
+      team7        team8        team9       team10       team11       team12  
+ -2.403e+00   -4.202e+00   -2.897e+00   -3.065e+00   -1.466e+00   -4.538e+00  
+     team13       team14       team15       team16       team17       team18  
+ -2.419e+00   -3.314e+00   -1.922e+00   -4.971e+00   -9.354e-01   -4.538e+00  
+     team19       team20       team21       team22       team23       team24  
+ -3.440e+00   -3.893e+00   -3.001e+00   -4.475e+00   -1.855e+00   -4.041e+00  
+     team25       team26       team27       team28       team29       team30  
+ -3.421e+00   -3.934e+00   -2.449e+00   -4.723e+00   -3.152e+00   -2.860e+00  
+     team31       team32       team33       team34       team35       team36  
+ -1.065e+00   -4.576e+00   -1.807e+00   -5.208e+00   -3.342e+00   -3.683e+00  
+     team37       team38       team39       team40       team41       team42  
+ -2.808e+00   -4.129e+00   -2.331e+00   -4.730e+00   -3.768e+00   -4.568e+00  
+     team43       team44       team45       team46       team47       team48  
+ -2.793e+00   -5.084e+00   -2.402e+00   -1.938e+00   -1.593e+00   -4.642e+00  
+     team49       team50       team51       team52       team53       team54  
+ -1.477e+00   -5.256e+00   -4.198e+00   -4.494e+00   -3.630e+00   -4.390e+00  
+     team55       team56       team57       team58       team59       team60  
+ -3.707e+00   -5.321e+00   -3.100e+00   -3.848e+00   -2.001e+00   -4.933e+00  
+     team61       team62       team63       team64    opponent2    opponent3  
+ -3.732e+00   -3.808e+00   -1.901e+00   -5.003e+00    4.088e+00    3.808e+00  
+  opponent4    opponent5    opponent6    opponent7    opponent8    opponent9  
+  3.694e+00    3.132e+00    3.880e+00    2.403e+00    4.202e+00    2.897e+00  
+ opponent10   opponent11   opponent12   opponent13   opponent14   opponent15  
+  3.065e+00    1.466e+00    4.538e+00    2.419e+00    3.314e+00    1.922e+00  
+ opponent16   opponent17   opponent18   opponent19   opponent20   opponent21  
+  4.971e+00    9.354e-01    4.538e+00    3.440e+00    3.893e+00    3.001e+00  
+ opponent22   opponent23   opponent24   opponent25   opponent26   opponent27  
+  4.475e+00    1.855e+00    4.041e+00    3.421e+00    3.934e+00    2.449e+00  
+ opponent28   opponent29   opponent30   opponent31   opponent32   opponent33  
+  4.723e+00    3.152e+00    2.860e+00    1.065e+00    4.576e+00    1.807e+00  
+ opponent34   opponent35   opponent36   opponent37   opponent38   opponent39  
+  5.208e+00    3.342e+00    3.683e+00    2.808e+00    4.129e+00    2.331e+00  
+ opponent40   opponent41   opponent42   opponent43   opponent44   opponent45  
+  4.730e+00    3.768e+00    4.568e+00    2.793e+00    5.084e+00    2.402e+00  
+ opponent46   opponent47   opponent48   opponent49   opponent50   opponent51  
+  1.938e+00    1.593e+00    4.642e+00    1.477e+00    5.256e+00    4.198e+00  
+ opponent52   opponent53   opponent54   opponent55   opponent56   opponent57  
+  4.494e+00    3.630e+00    4.390e+00    3.707e+00    5.321e+00    3.100e+00  
+ opponent58   opponent59   opponent60   opponent61   opponent62   opponent63  
+  3.848e+00    2.001e+00    4.933e+00    3.732e+00    3.808e+00    1.901e+00  
+ opponent64  
+  5.003e+00  
+
+Degrees of Freedom: 4031 Total (i.e. Null);  3905 Residual
+Null Deviance:	    217700000 
+Residual Deviance: 6330000 	AIC: 6358000
+> summary(fit)
+
+Call:
+glm(formula = cbind(won, lost) ~ team + opponent, family = binomial(logit), 
+    data = games)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-788.72    -8.45     0.00     8.45   788.72  
+
+Coefficients:
+              Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  8.465e-16  1.225e-03     0.0        1    
+team2       -4.088e+00  3.678e-03 -1111.3   <2e-16 ***
+team3       -3.808e+00  3.059e-03 -1245.0   <2e-16 ***
+team4       -3.694e+00  3.048e-03 -1211.9   <2e-16 ***
+team5       -3.132e+00  1.806e-03 -1733.8   <2e-16 ***
+team6       -3.880e+00  1.932e-03 -2008.0   <2e-16 ***
+team7       -2.403e+00  1.702e-03 -1411.9   <2e-16 ***
+team8       -4.202e+00  2.027e-03 -2073.6   <2e-16 ***
+team9       -2.897e+00  1.657e-03 -1748.5   <2e-16 ***
+team10      -3.065e+00  1.698e-03 -1804.7   <2e-16 ***
+team11      -1.466e+00  1.330e-03 -1102.2   <2e-16 ***
+team12      -4.538e+00  2.640e-03 -1718.7   <2e-16 ***
+team13      -2.419e+00  1.520e-03 -1591.1   <2e-16 ***
+team14      -3.314e+00  1.716e-03 -1931.9   <2e-16 ***
+team15      -1.922e+00  1.390e-03 -1383.0   <2e-16 ***
+team16      -4.971e+00  2.720e-03 -1827.7   <2e-16 ***
+team17      -9.354e-01  1.272e-03  -735.2   <2e-16 ***
+team18      -4.538e+00  3.104e-03 -1461.8   <2e-16 ***
+team19      -3.440e+00  2.182e-03 -1576.6   <2e-16 ***
+team20      -3.893e+00  2.281e-03 -1707.1   <2e-16 ***
+team21      -3.001e+00  1.739e-03 -1725.5   <2e-16 ***
+team22      -4.475e+00  2.077e-03 -2154.5   <2e-16 ***
+team23      -1.855e+00  1.443e-03 -1285.9   <2e-16 ***
+team24      -4.041e+00  2.064e-03 -1958.0   <2e-16 ***
+team25      -3.421e+00  1.770e-03 -1933.2   <2e-16 ***
+team26      -3.934e+00  1.859e-03 -2116.2   <2e-16 ***
+team27      -2.449e+00  1.531e-03 -1600.0   <2e-16 ***
+team28      -4.723e+00  2.206e-03 -2141.3   <2e-16 ***
+team29      -3.152e+00  1.834e-03 -1718.5   <2e-16 ***
+team30      -2.860e+00  1.763e-03 -1622.0   <2e-16 ***
+team31      -1.065e+00  1.277e-03  -834.0   <2e-16 ***
+team32      -4.576e+00  3.079e-03 -1486.0   <2e-16 ***
+team33      -1.807e+00  1.441e-03 -1253.8   <2e-16 ***
+team34      -5.208e+00  3.053e-03 -1705.8   <2e-16 ***
+team35      -3.342e+00  1.848e-03 -1808.6   <2e-16 ***
+team36      -3.683e+00  1.919e-03 -1919.2   <2e-16 ***
+team37      -2.808e+00  1.664e-03 -1687.8   <2e-16 ***
+team38      -4.129e+00  1.961e-03 -2105.3   <2e-16 ***
+team39      -2.331e+00  1.551e-03 -1503.4   <2e-16 ***
+team40      -4.730e+00  2.305e-03 -2052.3   <2e-16 ***
+team41      -3.768e+00  1.870e-03 -2014.7   <2e-16 ***
+team42      -4.568e+00  2.020e-03 -2262.0   <2e-16 ***
+team43      -2.793e+00  1.627e-03 -1717.1   <2e-16 ***
+team44      -5.084e+00  2.279e-03 -2230.7   <2e-16 ***
+team45      -2.402e+00  1.543e-03 -1557.2   <2e-16 ***
+team46      -1.938e+00  2.206e-03  -878.3   <2e-16 ***
+team47      -1.593e+00  1.431e-03 -1113.7   <2e-16 ***
+team48      -4.642e+00  2.744e-03 -1691.9   <2e-16 ***
+team49      -1.477e+00  1.374e-03 -1074.9   <2e-16 ***
+team50      -5.256e+00  3.388e-03 -1551.7   <2e-16 ***
+team51      -4.198e+00  2.369e-03 -1772.0   <2e-16 ***
+team52      -4.494e+00  2.420e-03 -1856.7   <2e-16 ***
+team53      -3.630e+00  1.789e-03 -2029.0   <2e-16 ***
+team54      -4.390e+00  1.902e-03 -2308.2   <2e-16 ***
+team55      -3.707e+00  1.746e-03 -2123.0   <2e-16 ***
+team56      -5.321e+00  1.910e-03 -2785.5   <2e-16 ***
+team57      -3.100e+00  1.756e-03 -1765.3   <2e-16 ***
+team58      -3.848e+00  1.905e-03 -2019.8   <2e-16 ***
+team59      -2.001e+00  1.480e-03 -1351.7   <2e-16 ***
+team60      -4.933e+00  2.630e-03 -1875.5   <2e-16 ***
+team61      -3.732e+00  1.948e-03 -1915.8   <2e-16 ***
+team62      -3.808e+00  1.962e-03 -1940.8   <2e-16 ***
+team63      -1.901e+00  1.451e-03 -1309.6   <2e-16 ***
+team64      -5.003e+00  2.734e-03 -1830.2   <2e-16 ***
+opponent2    4.088e+00  3.678e-03  1111.3   <2e-16 ***
+opponent3    3.808e+00  3.059e-03  1245.0   <2e-16 ***
+opponent4    3.694e+00  3.048e-03  1211.9   <2e-16 ***
+opponent5    3.132e+00  1.806e-03  1733.8   <2e-16 ***
+opponent6    3.880e+00  1.932e-03  2008.0   <2e-16 ***
+opponent7    2.403e+00  1.702e-03  1411.9   <2e-16 ***
+opponent8    4.202e+00  2.027e-03  2073.6   <2e-16 ***
+opponent9    2.897e+00  1.657e-03  1748.5   <2e-16 ***
+opponent10   3.065e+00  1.698e-03  1804.7   <2e-16 ***
+opponent11   1.466e+00  1.330e-03  1102.2   <2e-16 ***
+opponent12   4.538e+00  2.640e-03  1718.7   <2e-16 ***
+opponent13   2.419e+00  1.520e-03  1591.1   <2e-16 ***
+opponent14   3.314e+00  1.716e-03  1931.9   <2e-16 ***
+opponent15   1.922e+00  1.390e-03  1383.0   <2e-16 ***
+opponent16   4.971e+00  2.720e-03  1827.7   <2e-16 ***
+opponent17   9.354e-01  1.272e-03   735.2   <2e-16 ***
+opponent18   4.538e+00  3.104e-03  1461.8   <2e-16 ***
+opponent19   3.440e+00  2.182e-03  1576.6   <2e-16 ***
+opponent20   3.893e+00  2.281e-03  1707.1   <2e-16 ***
+opponent21   3.001e+00  1.739e-03  1725.5   <2e-16 ***
+opponent22   4.475e+00  2.077e-03  2154.5   <2e-16 ***
+opponent23   1.855e+00  1.443e-03  1285.9   <2e-16 ***
+opponent24   4.041e+00  2.064e-03  1958.0   <2e-16 ***
+opponent25   3.421e+00  1.770e-03  1933.2   <2e-16 ***
+opponent26   3.934e+00  1.859e-03  2116.2   <2e-16 ***
+opponent27   2.449e+00  1.531e-03  1600.0   <2e-16 ***
+opponent28   4.723e+00  2.206e-03  2141.3   <2e-16 ***
+opponent29   3.152e+00  1.834e-03  1718.5   <2e-16 ***
+opponent30   2.860e+00  1.763e-03  1622.0   <2e-16 ***
+opponent31   1.065e+00  1.277e-03   834.0   <2e-16 ***
+opponent32   4.576e+00  3.079e-03  1486.0   <2e-16 ***
+opponent33   1.807e+00  1.441e-03  1253.8   <2e-16 ***
+opponent34   5.208e+00  3.053e-03  1705.8   <2e-16 ***
+opponent35   3.342e+00  1.848e-03  1808.6   <2e-16 ***
+opponent36   3.683e+00  1.919e-03  1919.2   <2e-16 ***
+opponent37   2.808e+00  1.664e-03  1687.8   <2e-16 ***
+opponent38   4.129e+00  1.961e-03  2105.3   <2e-16 ***
+opponent39   2.331e+00  1.551e-03  1503.4   <2e-16 ***
+opponent40   4.730e+00  2.305e-03  2052.3   <2e-16 ***
+opponent41   3.768e+00  1.870e-03  2014.7   <2e-16 ***
+opponent42   4.568e+00  2.020e-03  2262.0   <2e-16 ***
+opponent43   2.793e+00  1.627e-03  1717.1   <2e-16 ***
+opponent44   5.084e+00  2.279e-03  2230.7   <2e-16 ***
+opponent45   2.402e+00  1.543e-03  1557.2   <2e-16 ***
+opponent46   1.938e+00  2.206e-03   878.3   <2e-16 ***
+opponent47   1.593e+00  1.431e-03  1113.7   <2e-16 ***
+opponent48   4.642e+00  2.744e-03  1691.9   <2e-16 ***
+opponent49   1.477e+00  1.374e-03  1074.9   <2e-16 ***
+opponent50   5.256e+00  3.388e-03  1551.7   <2e-16 ***
+opponent51   4.198e+00  2.369e-03  1772.0   <2e-16 ***
+opponent52   4.494e+00  2.420e-03  1856.7   <2e-16 ***
+opponent53   3.630e+00  1.789e-03  2029.0   <2e-16 ***
+opponent54   4.390e+00  1.902e-03  2308.2   <2e-16 ***
+opponent55   3.707e+00  1.746e-03  2123.0   <2e-16 ***
+opponent56   5.321e+00  1.910e-03  2785.5   <2e-16 ***
+opponent57   3.100e+00  1.756e-03  1765.3   <2e-16 ***
+opponent58   3.848e+00  1.905e-03  2019.8   <2e-16 ***
+opponent59   2.001e+00  1.480e-03  1351.7   <2e-16 ***
+opponent60   4.933e+00  2.630e-03  1875.5   <2e-16 ***
+opponent61   3.732e+00  1.948e-03  1915.8   <2e-16 ***
+opponent62   3.808e+00  1.962e-03  1940.8   <2e-16 ***
+opponent63   1.901e+00  1.451e-03  1309.6   <2e-16 ***
+opponent64   5.003e+00  2.734e-03  1830.2   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 217747939  on 4031  degrees of freedom
+Residual deviance:   6330117  on 3905  degrees of freedom
+AIC: 6358348
+
+Number of Fisher Scoring iterations: 5
+
+> exp(coef(fit))
+ (Intercept)        team2        team3        team4        team5        team6 
+1.000000e+00 1.677858e-02 2.218185e-02 2.488195e-02 4.362742e-02 2.065726e-02 
+       team7        team8        team9       team10       team11       team12 
+9.044998e-02 1.496165e-02 5.519255e-02 4.664620e-02 2.307798e-01 1.069958e-02 
+      team13       team14       team15       team16       team17       team18 
+8.900693e-02 3.636267e-02 1.463042e-01 6.939484e-03 3.924126e-01 1.069381e-02 
+      team19       team20       team21       team22       team23       team24 
+3.205446e-02 2.037439e-02 4.975286e-02 1.138968e-02 1.564081e-01 1.758013e-02 
+      team25       team26       team27       team28       team29       team30 
+3.267822e-02 1.956831e-02 8.638106e-02 8.888031e-03 4.278166e-02 5.726238e-02 
+      team31       team32       team33       team34       team35       team36 
+3.447388e-01 1.029591e-02 1.641219e-01 5.474458e-03 3.536205e-02 2.514247e-02 
+      team37       team38       team39       team40       team41       team42 
+6.030045e-02 1.610439e-02 9.715799e-02 8.823389e-03 2.308760e-02 1.037568e-02 
+      team43       team44       team45       team46       team47       team48 
+6.123710e-02 6.194130e-03 9.051359e-02 1.440281e-01 2.032795e-01 9.634945e-03 
+      team49       team50       team51       team52       team53       team54 
+2.283816e-01 5.213989e-03 1.501900e-02 1.117856e-02 2.651177e-02 1.240476e-02 
+      team55       team56       team57       team58       team59       team60 
+2.454718e-02 4.885713e-03 4.504716e-02 2.132772e-02 1.352192e-01 7.207490e-03 
+      team61       team62       team63       team64    opponent2    opponent3 
+2.393923e-02 2.219189e-02 1.494688e-01 6.716967e-03 5.959981e+01 4.508191e+01 
+   opponent4    opponent5    opponent6    opponent7    opponent8    opponent9 
+4.018977e+01 2.292137e+01 4.840912e+01 1.105583e+01 6.683757e+01 1.811839e+01 
+  opponent10   opponent11   opponent12   opponent13   opponent14   opponent15 
+2.143797e+01 4.333135e+00 9.346165e+01 1.123508e+01 2.750073e+01 6.835075e+00 
+  opponent16   opponent17   opponent18   opponent19   opponent20   opponent21 
+1.441029e+02 2.548338e+00 9.351205e+01 3.119691e+01 4.908122e+01 2.009935e+01 
+  opponent22   opponent23   opponent24   opponent25   opponent26   opponent27 
+8.779878e+01 6.393529e+00 5.688240e+01 3.060142e+01 5.110303e+01 1.157661e+01 
+  opponent28   opponent29   opponent30   opponent31   opponent32   opponent33 
+1.125109e+02 2.337450e+01 1.746347e+01 2.900747e+00 9.712591e+01 6.093033e+00 
+  opponent34   opponent35   opponent36   opponent37   opponent38   opponent39 
+1.826665e+02 2.827891e+01 3.977334e+01 1.658362e+01 6.209488e+01 1.029251e+01 
+  opponent40   opponent41   opponent42   opponent43   opponent44   opponent45 
+1.133351e+02 4.331330e+01 9.637923e+01 1.632997e+01 1.614432e+02 1.104806e+01 
+  opponent46   opponent47   opponent48   opponent49   opponent50   opponent51 
+6.943091e+00 4.919335e+00 1.037889e+02 4.378637e+00 1.917917e+02 6.658234e+01 
+  opponent52   opponent53   opponent54   opponent55   opponent56   opponent57 
+8.945699e+01 3.771909e+01 8.061422e+01 4.073788e+01 2.046784e+02 2.219896e+01 
+  opponent58   opponent59   opponent60   opponent61   opponent62   opponent63 
+4.688735e+01 7.395402e+00 1.387446e+02 4.177244e+01 4.506150e+01 6.690361e+00 
+  opponent64 
+1.488767e+02 
+> 
+> 

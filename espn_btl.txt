@@ -1,0 +1,123 @@
+
+R version 3.1.3 (2015-03-09) -- "Smooth Sidewalk"
+Copyright (C) 2015 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(BradleyTerry2)
+> 
+> games <- read.csv("outcomes.csv", header=TRUE)
+> teams <- read.csv("teams.csv", header=TRUE)
+> 
+> games$team <- as.factor(games$team)
+> games$opponent <- as.factor(games$opponent)
+> 
+> head(games)
+  team opponent     won  lost
+1    1        1       0     0
+2   64       64       0     0
+3    1        2 3497771 43925
+4    1        3 1619871 30790
+5    1        4 1809832 37278
+6    1        5  849111 45138
+> 
+> dim(games)
+[1] 2018    4
+> 
+> fit <- BTm(cbind(won, lost), team, opponent, data = games)
+> 
+> espn <- as.data.frame(BTabilities(fit))
+> espn$id <- rownames(espn)
+> 
+> ranks <- merge(teams, espn)
+> ranks <- ranks[with(ranks, order(-ability)), ]
+> 
+> ranks <- subset(ranks, TRUE, select=c(k_id,name_long,ability))
+> colnames(ranks)[1] <- "id"
+> colnames(ranks)[2] <- "team"
+> 
+> ranks$strength <- exp(ranks$ability)
+> 
+> ranks <- cbind(rank=rank(-ranks$ability), ranks)
+> 
+> ranks
+   rank   id          team    ability    strength
+1     1 1246      Kentucky  0.0000000 1.000000000
+17    2 1458     Wisconsin -0.9354414 0.392412622
+31    3 1112       Arizona -1.0649683 0.344738774
+11    4 1323    Notre Dame -1.4662912 0.230779811
+49    5 1181          Duke -1.4767375 0.228381573
+47    6 1438      Virginia -1.5931734 0.203279496
+33    7 1437     Villanova -1.8071460 0.164121871
+23    8 1314           UNC -1.8552864 0.156408139
+63    9 1211       Gonzaga -1.9006678 0.149468769
+15   10 1242        Kansas -1.9220675 0.146304171
+46   11 1208       Georgia -1.9377470 0.144028081
+59   12 1235    Iowa State -2.0008584 0.135219157
+39   13 1257    Louisville -2.3314168 0.097157993
+45   14 1277   Michigan St -2.4022553 0.090513592
+7    15 1268      Maryland -2.4029582 0.090449984
+13   16 1455    Wichita St -2.4190411 0.089006928
+27   17 1124        Baylor -2.4489869 0.086381058
+43   18 1328      Oklahoma -2.7930021 0.061237100
+37   19 1320        N Iowa -2.8084156 0.060300454
+30   20 1326    Ohio State -2.8601114 0.057262380
+9    21 1139        Butler -2.8969272 0.055192554
+21   22 1116      Arkansas -3.0006873 0.049752862
+10   23 1400         Texas -3.0651637 0.046646203
+57   24 1374           SMU -3.1000454 0.045047156
+5    25 1452 West Virginia -3.1320695 0.043627417
+29   26 1433           VCU -3.1516458 0.042781658
+14   27 1231       Indiana -3.3142125 0.036362672
+35   28 1301      NC State -3.3421161 0.035362048
+25   29 1462        Xavier -3.4210463 0.032678225
+19   30 1332        Oregon -3.4403190 0.032054457
+53   31 1428          Utah -3.6301664 0.026511772
+36   32 1261           LSU -3.6831968 0.025142470
+4    33 1345        Purdue -3.6936125 0.024881955
+55   34 1207    Georgetown -3.7071584 0.024547178
+61   35 1234          Iowa -3.7322369 0.023939226
+41   36 1344    Providence -3.7684596 0.023087599
+62   37 1172      Davidson -3.8080282 0.022191893
+3    38 1153    Cincinnati -3.8084810 0.022181848
+58   39 1417          UCLA -3.8477479 0.021327715
+6    40 1138       Buffalo -3.8796882 0.020657265
+20   41 1329   Oklahoma St -3.8934766 0.020374390
+26   42 1279      Ole Miss -3.9338438 0.019568311
+24   43 1217       Harvard -4.0409860 0.017580130
+2    44 1214       Hampton -4.0876524 0.016778577
+38   45 1461       Wyoming -4.1286635 0.016104387
+51   46 1361  San Diego St -4.1984394 0.015018997
+8    47 1434    Valparaiso -4.2022653 0.014961645
+54   48 1372     SF Austin -4.3896751 0.012404759
+22   49 1459       Wofford -4.4750476 0.011389680
+52   50 1385    St. John's -4.4937579 0.011178557
+12   51 1318  Northeastern -4.5375512 0.010699576
+18   52 1157   Coastal Car -4.5380904 0.010693808
+42   53 1173        Dayton -4.5682908 0.010375679
+32   54 1411      Texas So -4.5760082 0.010295914
+48   55 1125       Belmont -4.6423587 0.009634945
+28   56 1209    Georgia St -4.7230498 0.008888031
+40   57 1414     UC Irvine -4.7303492 0.008823389
+60   58 1412           UAB -4.9326345 0.007207490
+16   59 1308      NM State -4.9705279 0.006939484
+64   60 1295      ND State -5.0031186 0.006716967
+44   61 1107        Albany -5.0841532 0.006194130
+34   62 1248     Lafayette -5.2076619 0.005474458
+50   63 1352     R. Morris -5.2564100 0.005213989
+56   64 1186  E Washington -5.3214401 0.004885713
+> write.csv(ranks, file="ranks.csv", row.names=FALSE)
+> 
