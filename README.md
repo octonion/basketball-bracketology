@@ -1,6 +1,6 @@
 ## ESPN 2015 Brackets and Imputed Power Rankings
 
-Merged with another source to yield 3541696 unique ESPN NCAA tournament brackets, which in turn expand to 223126848 game predictions.
+Merged with https://github.com/Bekt/espn-brackets to yield 3541696 unique ESPN NCAA tournament brackets, which in turn expand to 223126848 game predictions.
 
 Uncompress brackets archive:
 
